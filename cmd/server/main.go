@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/ports"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/service"
+	"github.com/sofisoft-tech/ms-measureunit/seedwork/middleware"
 )
 
 func main() {
@@ -34,6 +35,13 @@ func Handler(si ServerInterface, router *echo.Echo) {
 		router = echo.New()
 	}
 
+	api := router.Group("/api/v1")
+	api.Use(middleware.Logger())
+	// api.Use(middleware.Recover(),
+	// 	middleware.RequestID())
+
+	api.POST("/measuretypes", si.CreateMeasureType)
+
 	router.Use(
 	// middleware.Recover(), // Recover from all panics to always have your server up
 	// middleware.Logger(),    // Log everything to stdout
@@ -48,5 +56,5 @@ func Handler(si ServerInterface, router *echo.Echo) {
 	// 	router.DefaultHTTPErrorHandler(err, c)
 	// }
 
-	router.POST("/api/v1/measuretypes", si.CreateMeasureType)
+	// router.POST("/api/v1/measuretypes", si.CreateMeasureType)
 }
