@@ -2,9 +2,12 @@ package command
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type CreateMeasureType struct {
@@ -24,7 +27,16 @@ func NewCreateMeasureTypeHandler(repo measuretype.Repository) CreateMeasureTypeH
 }
 
 func (h CreateMeasureTypeHandler) Handle(ctx context.Context, command CreateMeasureType) (string, error) {
-	item := new(measuretype.MeasureType)
+	count, err := h.repo.Count(ctx, bson.M{"name": primitive.Regex{
+		Pattern: "^" + command.Name + "$",
+		Options: "i",
+	}})
+
+	if count > 0 {
+		return "", errors.New("Ya existe un elemento con el mismo nombre")
+	}
+
+	item := measuretype.MeasureType{}
 
 	item.Name = command.Name
 	item.CreatedAt = time.Now()

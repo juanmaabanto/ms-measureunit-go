@@ -28,6 +28,7 @@ func (h HttpServer) CreateMeasureType(c echo.Context) error {
 	id, err := h.app.Commands.CreateMeasureType.Handle(c.Request().Context(), item)
 
 	if err != nil {
+		// return c.JSON(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
 
