@@ -10,11 +10,11 @@ import (
 )
 
 type LoggerConfig struct {
-	LoggerErrorFunc func(message string, trace string, username string) string
+	LoggerErrorFunc func(message string, trace string, username string, userAgent string) string
 }
 
 var DefaultLoggerConfig = LoggerConfig{
-	LoggerErrorFunc: func(message string, trace string, username string) string {
+	LoggerErrorFunc: func(message string, trace string, username string, userAgent string) string {
 		fmt.Println(message)
 
 		return "Id autogenerado por defaultLoggerConfig"
@@ -46,7 +46,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 
 						c.JSON(http.StatusBadRequest, response)
 					} else {
-						errorId := config.LoggerErrorFunc(err.Error(), "trace", "test")
+						errorId := config.LoggerErrorFunc(err.Error(), "trace", "test", c.Request().Header.Get("User-Agent"))
 
 						response := responses.ErrorResponse{
 							ErrorId: errorId,
