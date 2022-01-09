@@ -2,10 +2,10 @@ package command
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
+	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -33,8 +33,7 @@ func (h CreateMeasureTypeHandler) Handle(ctx context.Context, command CreateMeas
 	}})
 
 	if count > 0 {
-		return "", errors.New("Un error para el logger")
-		// return "", errors.NewBadRequestError("Ya existe un elemento con el mismo nombre") //.New("Ya existe un elemento con el mismo nombre")
+		return "", errors.NewBadRequestError("Ya existe un elemento con el mismo nombre")
 	}
 
 	item := measuretype.MeasureType{}

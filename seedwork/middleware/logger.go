@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"runtime"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
@@ -35,30 +36,89 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 						err = fmt.Errorf("%v", r)
 					}
 
-					customErr, ok := err.(errors.ApplicationError)
+					var errorId string
+					statusCode := getStatusCode(err)
 
-					if ok && customErr.ErrorType() == errors.ErrorTypeBadRequest {
-						response := responses.ErrorResponse{
-							Message: customErr.Error(),
-							Status:  400,
-							Title:   customErr.Title(),
-						}
+					if statusCode == 500 {
+						stack := make([]byte, 1<<10)
+						length := runtime.Stack(stack, true)
 
-						c.JSON(http.StatusBadRequest, response)
-					} else {
-						errorId := config.LoggerErrorFunc(err.Error(), "trace", "test", c.Request().Header.Get("User-Agent"))
-
-						response := responses.ErrorResponse{
-							ErrorId: errorId,
-							Message: err.Error(),
-							Status:  500,
-						}
-						c.JSON(http.StatusInternalServerError, response)
+						errorId = config.LoggerErrorFunc(err.Error(), string(stack[:length]), "test", c.Request().UserAgent())
 					}
+
+					response := responses.ErrorResponse{
+						ErrorId: errorId,
+						Message: getMessage(err, *c.Request()),
+						Status:  statusCode,
+						Title:   getTitle(err),
+					}
+
+					c.JSON(statusCode, response)
 				}
 			}()
 
 			return next(c)
 		}
+	}
+}
+
+func getCustomMessage(request http.Request) string {
+	switch request.Method {
+	case http.MethodDelete:
+		return "Se produjo un error al eliminar el recurso"
+	case http.MethodGet:
+		return "Se produjo un error obteniendo el recurso."
+	case http.MethodPatch:
+		return "Se produjo un error al intentar actualizar el recurso."
+	case http.MethodPost:
+		return "Se produjo un error al intentar crear el recurso."
+	case http.MethodPut:
+		return "Se produjo un error al intentar actualizar el recurso."
+	default:
+		return "Se produjo un error al consumir el servicio."
+	}
+}
+
+func getMessage(err error, request http.Request) string {
+	customErr, ok := err.(errors.ApplicationError)
+
+	if !ok {
+		return getCustomMessage(request)
+	}
+
+	switch customErr.ErrorType() {
+	case errors.ErrorTypeBadRequest, errors.ErrorTypeNotFound, errors.ErrorTypeValidation:
+		return customErr.Error()
+	default:
+		return getCustomMessage(request)
+	}
+}
+
+func getStatusCode(err error) int {
+	customErr, ok := err.(errors.ApplicationError)
+
+	if !ok {
+		return http.StatusInternalServerError
+	}
+
+	switch customErr.ErrorType() {
+	case errors.ErrorTypeBadRequest:
+		return http.StatusBadRequest
+	case errors.ErrorTypeNotFound:
+		return http.StatusNotFound
+	case errors.ErrorTypeValidation:
+		return http.StatusUnprocessableEntity
+	default:
+		return http.StatusInternalServerError
+	}
+}
+
+func getTitle(err error) string {
+	customErr, ok := err.(errors.ApplicationError)
+
+	if !ok {
+		return "Server Error"
+	} else {
+		return customErr.Title()
 	}
 }

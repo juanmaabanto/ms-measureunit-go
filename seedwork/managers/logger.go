@@ -69,25 +69,6 @@ func (log LoggerManager) logger(endPoint string, message string, trace string, u
 		fmt.Println(err)
 		return ""
 	}
-	fmt.Println(string(body))
-
-	// resp, err := http.Post(log.BaseAddress+endPoint, "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
-	// resp.Header.Set()
-	// if err != nil {
-	// 	fmt.Println("error request")
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println(resp)
-	// defer resp.Body.Close()
-	// bodyBytes, _ := ioutil.ReadAll(resp.Body)
-
-	// bodyString := string(bodyBytes)
-	// fmt.Println("respuesta request")
-	// fmt.Println(bodyString)
-
-	// var todoStruct string
-	// json.Unmarshal(bodyBytes, &todoStruct)
-	// fmt.Printf("%+v\n", todoStruct)
 
 	return string(body)
 }

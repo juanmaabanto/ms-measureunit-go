@@ -8,6 +8,7 @@ var (
 	ErrorTypeUnknown    = ErrorType{"unknown"}
 	ErrorTypeBadRequest = ErrorType{"bad-request"}
 	ErrorTypeNotFound   = ErrorType{"not-found"}
+	ErrorTypeValidation = ErrorType{"Validation Failure"}
 )
 
 type ApplicationError struct {
