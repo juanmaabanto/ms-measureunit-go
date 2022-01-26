@@ -11,7 +11,8 @@ import (
 )
 
 type CreateMeasureType struct {
-	Name string `json:"name"`
+	Name  string `json:"name" validate:"required,max=10"`
+	Name2 string `json:"name2" validate:"required,max=10"`
 }
 
 type CreateMeasureTypeHandler struct {

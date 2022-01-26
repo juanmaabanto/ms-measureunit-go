@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/ports"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/service"
+	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/validations"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/managers"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/middleware"
 )
@@ -36,6 +37,8 @@ func Handler(si ServerInterface, router *echo.Echo) {
 		router = echo.New()
 	}
 
+	router.Validator = validations.NewValidationUtil()
+
 	loggerManager := managers.NewLoggerManager("https://services.sofisoft.pe/logging/", "ms-measureunit")
 
 	api := router.Group("/api/v1")
@@ -45,5 +48,4 @@ func Handler(si ServerInterface, router *echo.Echo) {
 	}))
 
 	api.POST("/measuretypes", si.CreateMeasureType)
-
 }

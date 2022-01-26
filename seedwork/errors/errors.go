@@ -12,13 +12,18 @@ var (
 )
 
 type ApplicationError struct {
-	error     string
+	message   string
 	title     string
 	errorType ErrorType
+	errors    map[string]string
 }
 
 func (app ApplicationError) Error() string {
-	return app.error
+	return app.message
+}
+
+func (app ApplicationError) Errors() map[string]string {
+	return app.errors
 }
 
 func (app ApplicationError) Title() string {
@@ -31,7 +36,7 @@ func (app ApplicationError) ErrorType() ErrorType {
 
 func NewApplicationError(error string, title string) ApplicationError {
 	return ApplicationError{
-		error:     error,
+		message:   error,
 		title:     title,
 		errorType: ErrorTypeUnknown,
 	}
@@ -39,7 +44,7 @@ func NewApplicationError(error string, title string) ApplicationError {
 
 func NewBadRequestError(error string) ApplicationError {
 	return ApplicationError{
-		error:     error,
+		message:   error,
 		title:     "Bad Request",
 		errorType: ErrorTypeBadRequest,
 	}
@@ -47,8 +52,17 @@ func NewBadRequestError(error string) ApplicationError {
 
 func NewNotFoundError(error string) ApplicationError {
 	return ApplicationError{
-		error:     error,
+		message:   error,
 		title:     "Not Found",
 		errorType: ErrorTypeNotFound,
+	}
+}
+
+func NewValidationError(errors map[string]string) ApplicationError {
+	return ApplicationError{
+		message:   "One or more validation errors occurred.",
+		title:     "Validation Failure",
+		errorType: ErrorTypeValidation,
+		errors:    errors,
 	}
 }

@@ -51,6 +51,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 						Message: getMessage(err, *c.Request()),
 						Status:  statusCode,
 						Title:   getTitle(err),
+						Errors:  getErrors(err),
 					}
 
 					c.JSON(statusCode, response)
@@ -76,6 +77,20 @@ func getCustomMessage(request http.Request) string {
 		return "Se produjo un error al intentar actualizar el recurso."
 	default:
 		return "Se produjo un error al consumir el servicio."
+	}
+}
+
+func getErrors(err error) map[string]string {
+	customErr, ok := err.(errors.ApplicationError)
+
+	if !ok {
+		return nil
+	}
+
+	if customErr.ErrorType() == errors.ErrorTypeValidation {
+		return customErr.Errors()
+	} else {
+		return nil
 	}
 }
 
