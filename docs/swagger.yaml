@@ -1,0 +1,77 @@
+definitions:
+  measuretype.MeasureType:
+    properties:
+      createdAt:
+        type: string
+      createdBy:
+        type: string
+      id:
+        type: string
+      modifiedAt:
+        type: string
+      modifiedBy:
+        type: string
+      name:
+        type: string
+    type: object
+  responses.ErrorResponse:
+    properties:
+      errorId:
+        type: string
+      errors:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    type: object
+info:
+  contact:
+    email: juan.abanto@sofisoft.pe
+    name: Sofisoft Technologies SAC
+    url: https://sofisoft.pe
+  description: Specifying services for measure units.
+  license:
+    name: MIT License
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Measure Unit API
+  version: v1
+paths:
+  /api/v1/measuretypes:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Object to be created.
+        in: body
+        name: command
+        required: true
+        schema:
+          $ref: '#/definitions/measuretype.MeasureType'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Id of the created object
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+      summary: Create a new type of measure.
+      tags:
+      - MeasureTypes
+swagger: "2.0"

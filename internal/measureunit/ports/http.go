@@ -22,6 +22,17 @@ func NewHttpServer(application app.Application) HttpServer {
 	}
 }
 
+// CreateTodo godoc
+// @Summary Create a new type of measure.
+// @Tags MeasureTypes
+// @Accept json
+// @Produce json
+// @Param command body measuretype.MeasureType true "Object to be created."
+// @Success 201 {string} string "Id of the created object"
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 422 {object} responses.ErrorResponse
+// @Failure 500 {object} responses.ErrorResponse
+// @Router /api/v1/measuretypes [post]
 func (h HttpServer) CreateMeasureType(c echo.Context) error {
 	item := command.CreateMeasureType{}
 
@@ -46,9 +57,10 @@ func (h HttpServer) CreateMeasureType(c echo.Context) error {
 	}
 
 	// create a response
-	response := map[string]interface{}{"id": id}
 	//return success response
-	return c.JSON(http.StatusCreated, response)
+	c.Response().Header().Set("location", c.Request().URL.String()+"/"+id)
+
+	return c.JSON(http.StatusCreated, id)
 }
 
 func Simple(verr validator.ValidationErrors) map[string]string {
