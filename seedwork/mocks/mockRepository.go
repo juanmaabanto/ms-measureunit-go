@@ -50,7 +50,7 @@ func (mock MockRepository) InsertMany(ctx context.Context, documents []interface
 }
 
 func (mock MockRepository) InsertOne(ctx context.Context, document interface{}) (string, error) {
-	args := mock.Called()
+	args := mock.Called(ctx, document)
 	result := args.Get(0)
 
 	return result.(string), args.Error(1)

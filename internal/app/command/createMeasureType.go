@@ -37,7 +37,7 @@ func (h CreateMeasureTypeHandler) Handle(ctx context.Context, command CreateMeas
 	}
 
 	if count > 0 {
-		return "", errors.NewBadRequestError("Ya existe un elemento con el mismo nombre")
+		return "", errors.NewBadRequestError("An element with the same name already exists.")
 	}
 
 	item := measuretype.MeasureType{}

@@ -2,6 +2,7 @@ package query
 
 import (
 	"context"
+	errorsN "errors"
 	"testing"
 
 	"github.com/sofisoft-tech/ms-measureunit/internal/domain/measuretype"
@@ -74,14 +75,13 @@ func Test_Handler_GetMeasureTypeById_Error(t *testing.T) {
 	mockRepo := new(mocks.MockRepository)
 	ctx := context.Background()
 
-	mockRepo.On("FindById", ctx, mock.AnythingOfType("string"), mock.AnythingOfType("*measuretype.MeasureType")).Return(errors.NewNotFoundError("An error has occurred"))
+	mockRepo.On("FindById", ctx, mock.AnythingOfType("string"), mock.AnythingOfType("*measuretype.MeasureType")).Return(errorsN.New("An error has occurred"))
 
 	// Act
 	testQuery := NewGetMeasureTypeByIdHandler(mockRepo)
 	_, err := testQuery.Handle(ctx, GetMeasureTypeById{Id: primitive.NewObjectID().String()})
 
 	// Assert
-
 	mockRepo.AssertExpectations(t)
 
 	assert.Error(t, err)
