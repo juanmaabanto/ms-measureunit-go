@@ -1,6 +1,8 @@
 # ms-measureunit-go
 units of measure context micro service in Go
 
+There is a postman collection for testing apis in the project root "ms-measureunit.postman_collection.json"
+
 ## Installation
 
   ```sh
