@@ -6,9 +6,9 @@ import (
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/command"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/query"
+	"github.com/sofisoft-tech/ms-measureunit/internal/app"
+	"github.com/sofisoft-tech/ms-measureunit/internal/app/command"
+	"github.com/sofisoft-tech/ms-measureunit/internal/app/query"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 )
 

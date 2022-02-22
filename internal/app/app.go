@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/command"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/query"
+	"github.com/sofisoft-tech/ms-measureunit/internal/app/command"
+	"github.com/sofisoft-tech/ms-measureunit/internal/app/query"
 )
 
 type Application struct {

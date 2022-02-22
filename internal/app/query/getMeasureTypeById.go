@@ -3,8 +3,8 @@ package query
 import (
 	"context"
 
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/ports/response"
+	"github.com/sofisoft-tech/ms-measureunit/internal/domain/measuretype"
+	"github.com/sofisoft-tech/ms-measureunit/internal/ports/response"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

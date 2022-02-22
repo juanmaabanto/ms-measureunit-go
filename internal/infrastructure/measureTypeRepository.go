@@ -1,7 +1,7 @@
-package adapters
+package infrastructure
 
 import (
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
+	"github.com/sofisoft-tech/ms-measureunit/internal/domain/measuretype"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/database"
 )

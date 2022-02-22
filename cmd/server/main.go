@@ -8,9 +8,9 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/ports"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/service"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/validations"
+	"github.com/sofisoft-tech/ms-measureunit/internal/ports"
+	"github.com/sofisoft-tech/ms-measureunit/internal/service"
+	"github.com/sofisoft-tech/ms-measureunit/internal/validations"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/managers"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"

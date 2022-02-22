@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/ports/response"
+	"github.com/sofisoft-tech/ms-measureunit/internal/domain/measuretype"
+	"github.com/sofisoft-tech/ms-measureunit/internal/ports/response"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/mocks"
 	"github.com/stretchr/testify/assert"

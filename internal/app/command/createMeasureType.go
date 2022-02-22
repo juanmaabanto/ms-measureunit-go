@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
+	"github.com/sofisoft-tech/ms-measureunit/internal/domain/measuretype"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
