@@ -44,6 +44,7 @@ func main() {
 type ServerInterface interface {
 	AddMeasureType(c echo.Context) error
 	GetMeasureType(c echo.Context) error
+	UpdateMeasureType(c echo.Context) error
 }
 
 func Handler(si ServerInterface, router *echo.Echo) {
@@ -66,5 +67,6 @@ func Handler(si ServerInterface, router *echo.Echo) {
 
 	//measureType
 	api.GET("/measuretypes/:id", si.GetMeasureType)
+	api.PATCH("/measuretypes", si.UpdateMeasureType)
 	api.POST("/measuretypes", si.AddMeasureType)
 }

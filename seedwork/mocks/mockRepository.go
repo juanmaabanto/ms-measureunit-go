@@ -62,8 +62,8 @@ func (mock MockRepository) Paginated(ctx context.Context, filter interface{}, so
 	return args.Error(0)
 }
 
-func (mock MockRepository) UpdateOne(ctx context.Context, document interface{}) error {
-	args := mock.Called()
+func (mock MockRepository) UpdateOne(ctx context.Context, id string, document interface{}) error {
+	args := mock.Called(ctx, id, document)
 
 	return args.Error(0)
 }

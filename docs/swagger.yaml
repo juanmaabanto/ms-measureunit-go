@@ -7,6 +7,19 @@ definitions:
     required:
     - name
     type: object
+  command.UpdateMeasureType:
+    properties:
+      id:
+        maxLength: 24
+        minLength: 24
+        type: string
+      name:
+        maxLength: 10
+        type: string
+    required:
+    - id
+    - name
+    type: object
   response.MeasureTypeResponse:
     properties:
       id:
@@ -42,6 +55,36 @@ info:
   version: v1
 paths:
   /api/v1/measuretypes:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Object to be modified.
+        in: body
+        name: command
+        required: true
+        schema:
+          $ref: '#/definitions/command.UpdateMeasureType'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+      summary: Update a type of measure.
+      tags:
+      - MeasureTypes
     post:
       consumes:
       - application/json

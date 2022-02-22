@@ -79,6 +79,38 @@ func (h HttpServer) GetMeasureType(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// UpdateMeasureType godoc
+// @Summary Update a type of measure.
+// @Tags MeasureTypes
+// @Accept json
+// @Produce json
+// @Param command body command.UpdateMeasureType true "Object to be modified."
+// @Success 204
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 422 {object} responses.ErrorResponse
+// @Failure 500 {object} responses.ErrorResponse
+// @Router /api/v1/measuretypes [patch]
+func (h HttpServer) UpdateMeasureType(c echo.Context) error {
+	item := command.UpdateMeasureType{}
+
+	if err := c.Bind(&item); err != nil {
+		panic(err)
+	}
+
+	if err := c.Validate(item); err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		panic(errors.NewValidationError(Simple(validationErrors)))
+	}
+
+	err := h.app.Commands.UpdateMeasureType.Handle(c.Request().Context(), item)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return c.JSON(http.StatusNoContent, nil)
+}
+
 func Simple(verr validator.ValidationErrors) map[string]string {
 	errs := make(map[string]string)
 

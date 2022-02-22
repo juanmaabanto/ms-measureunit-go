@@ -12,6 +12,7 @@ type Application struct {
 
 type Commands struct {
 	CreateMeasureType command.CreateMeasureTypeHandler
+	UpdateMeasureType command.UpdateMeasureTypeHandler
 }
 
 type Queries struct {

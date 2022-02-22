@@ -80,6 +80,52 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasureTypes"
+                ],
+                "summary": "Update a type of measure.",
+                "parameters": [
+                    {
+                        "description": "Object to be modified.",
+                        "name": "command",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/command.UpdateMeasureType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/measuretypes/{id}": {
@@ -139,6 +185,24 @@ var doc = `{
                 "name"
             ],
             "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 10
+                }
+            }
+        },
+        "command.UpdateMeasureType": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "maxLength": 24,
+                    "minLength": 24
+                },
                 "name": {
                     "type": "string",
                     "maxLength": 10

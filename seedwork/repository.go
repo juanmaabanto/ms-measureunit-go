@@ -2,7 +2,6 @@ package seedwork
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/database"
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,7 +19,7 @@ type IBaseRepository interface {
 	InsertMany(ctx context.Context, documents []interface{}) ([]string, error)
 	InsertOne(ctx context.Context, document interface{}) (string, error)
 	Paginated(ctx context.Context, filter interface{}, sort interface{}, pageSize int64, start int64, receiver interface{}) error
-	UpdateOne(ctx context.Context, document interface{}) error
+	UpdateOne(ctx context.Context, id string, document interface{}) error
 }
 
 type BaseRepository struct {
@@ -115,8 +114,6 @@ func (repo BaseRepository) InsertMany(ctx context.Context, documents []interface
 func (repo BaseRepository) InsertOne(ctx context.Context, document interface{}) (string, error) {
 	result, err := repo.collection.InsertOne(ctx, document)
 
-	fmt.Println(result.InsertedID.(primitive.ObjectID).Hex())
-
 	return result.InsertedID.(primitive.ObjectID).Hex(), err
 }
 
@@ -136,8 +133,14 @@ func (repo BaseRepository) Paginated(ctx context.Context, filter interface{}, so
 	return cursor.All(ctx, receiver)
 }
 
-func (repo BaseRepository) UpdateOne(ctx context.Context, document interface{}) error {
-	_, err := repo.collection.UpdateOne(ctx, bson.D{}, document)
+func (repo BaseRepository) UpdateOne(ctx context.Context, id string, document interface{}) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = repo.collection.UpdateOne(ctx, bson.D{{Key: "_id", Value: objID}}, bson.M{"$set": document})
 
 	return err
 }
