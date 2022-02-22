@@ -23,12 +23,12 @@ type IBaseRepository interface {
 }
 
 type BaseRepository struct {
-	collection *mongo.Collection
+	collection mongo.Collection
 }
 
-func NewBaseRepository(connection *database.MongoConnection, document IDocument) *BaseRepository {
-	repository := &BaseRepository{
-		collection: connection.Database.Collection(document.GetCollectionName()),
+func NewBaseRepository(connection database.MongoConnection, document IDocument) BaseRepository {
+	repository := BaseRepository{
+		collection: *connection.Database.Collection(document.GetCollectionName()),
 	}
 
 	return repository

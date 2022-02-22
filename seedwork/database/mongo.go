@@ -9,11 +9,11 @@ import (
 )
 
 type MongoConnection struct {
-	Client   *mongo.Client
-	Database *mongo.Database
+	Client   mongo.Client
+	Database mongo.Database
 }
 
-func NewMongoConnection(ctx context.Context, databaseName string, uri string) *MongoConnection {
+func NewMongoConnection(ctx context.Context, databaseName string, uri string) MongoConnection {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 
 	if err != nil {
@@ -24,8 +24,8 @@ func NewMongoConnection(ctx context.Context, databaseName string, uri string) *M
 		panic(err)
 	}
 
-	return &MongoConnection{
-		Client:   client,
-		Database: client.Database(databaseName),
+	return MongoConnection{
+		Client:   *client,
+		Database: *client.Database(databaseName),
 	}
 }
