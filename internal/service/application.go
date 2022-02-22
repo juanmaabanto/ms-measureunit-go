@@ -25,6 +25,7 @@ func NewApplication(ctx context.Context) app.Application {
 		},
 		Queries: app.Queries{
 			GetMeasureTypeById: query.NewGetMeasureTypeByIdHandler(measureTypeRepository),
+			ListMeasureTypes:   query.NewListMeasureTypesHandler(measureTypeRepository),
 		},
 	}
 }

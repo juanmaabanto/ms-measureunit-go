@@ -39,16 +39,10 @@ func (h UpdateMeasureTypeHandler) Handle(ctx context.Context, command UpdateMeas
 		return errors.NewNotFoundError("measureType")
 	}
 
-	objID, err := primitive.ObjectIDFromHex(command.Id)
-
-	if err != nil {
-		return err
-	}
-
 	count, err := h.repo.Count(ctx, bson.M{"name": primitive.Regex{
 		Pattern: "^" + command.Name + "$",
 		Options: "i",
-	}, "_id": bson.M{"$ne": objID}})
+	}, "_id": bson.M{"$ne": existent.Id}})
 
 	if err != nil {
 		return err
@@ -62,9 +56,5 @@ func (h UpdateMeasureTypeHandler) Handle(ctx context.Context, command UpdateMeas
 
 	err = h.repo.UpdateOne(ctx, existent.Id.Hex(), existent)
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

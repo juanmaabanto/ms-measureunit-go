@@ -17,4 +17,5 @@ type Commands struct {
 
 type Queries struct {
 	GetMeasureTypeById query.GetMeasureTypeByIdHandler
+	ListMeasureTypes   query.ListMeasureTypesHandler
 }

@@ -42,6 +42,16 @@ definitions:
       title:
         type: string
     type: object
+  responses.PaginatedResponse:
+    properties:
+      data: {}
+      pageSize:
+        type: integer
+      start:
+        type: integer
+      total:
+        type: integer
+    type: object
 info:
   contact:
     email: juan.abanto@sofisoft.pe
@@ -55,6 +65,40 @@ info:
   version: v1
 paths:
   /api/v1/measuretypes:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: word to search
+        in: query
+        name: name
+        type: string
+      - description: Number of results per page
+        in: query
+        name: pageSize
+        type: integer
+      - description: Page number
+        in: query
+        name: start
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.PaginatedResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+      summary: Return a Measure Type List.
+      tags:
+      - MeasureTypes
     patch:
       consumes:
       - application/json
@@ -72,6 +116,10 @@ paths:
           description: ""
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/responses.ErrorResponse'
         "422":

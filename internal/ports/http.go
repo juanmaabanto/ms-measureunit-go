@@ -3,6 +3,7 @@ package ports
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
@@ -10,6 +11,7 @@ import (
 	"github.com/sofisoft-tech/ms-measureunit/internal/app/command"
 	"github.com/sofisoft-tech/ms-measureunit/internal/app/query"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
+	"github.com/sofisoft-tech/ms-measureunit/seedwork/responses"
 )
 
 type HttpServer struct {
@@ -79,6 +81,49 @@ func (h HttpServer) GetMeasureType(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// ListMeasureType godoc
+// @Summary Return a Measure Type List.
+// @Tags MeasureTypes
+// @Accept json
+// @Produce json
+// @Param name query string  false  "word to search"
+// @Param pageSize query int  false  "Number of results per page"
+// @Param start query string  false  "Page number"
+// @Success 200 {object} responses.PaginatedResponse
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 500 {object} responses.ErrorResponse
+// @Router /api/v1/measuretypes [get]
+func (h HttpServer) ListMeasureType(c echo.Context) error {
+	pageSize, err := strconv.Atoi(c.QueryParam("pageSize"))
+
+	if err != nil {
+		pageSize = 50
+	}
+
+	start, err := strconv.Atoi(c.QueryParam("start"))
+
+	if err != nil {
+		start = 0
+	}
+
+	total, items, err := h.app.Queries.ListMeasureTypes.Handle(c.Request().Context(), query.ListMeasureTypes{
+		Name:     c.QueryParam("name"),
+		Start:    int64(start),
+		PageSize: int64(pageSize),
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return c.JSON(http.StatusOK, responses.PaginatedResponse{
+		Start:    int64(start),
+		PageSize: int64(pageSize),
+		Total:    total,
+		Data:     items,
+	})
+}
+
 // UpdateMeasureType godoc
 // @Summary Update a type of measure.
 // @Tags MeasureTypes
@@ -87,6 +132,7 @@ func (h HttpServer) GetMeasureType(c echo.Context) error {
 // @Param command body command.UpdateMeasureType true "Object to be modified."
 // @Success 204
 // @Failure 400 {object} responses.ErrorResponse
+// @Failure 404 {object} responses.ErrorResponse
 // @Failure 422 {object} responses.ErrorResponse
 // @Failure 500 {object} responses.ErrorResponse
 // @Router /api/v1/measuretypes [patch]
