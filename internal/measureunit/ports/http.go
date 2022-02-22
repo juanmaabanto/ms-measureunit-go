@@ -3,12 +3,12 @@ package ports
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/command"
+	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/query"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/errors"
 )
 
@@ -22,18 +22,18 @@ func NewHttpServer(application app.Application) HttpServer {
 	}
 }
 
-// CreateTodo godoc
+// CreateMeasureType godoc
 // @Summary Create a new type of measure.
 // @Tags MeasureTypes
 // @Accept json
 // @Produce json
-// @Param command body measuretype.MeasureType true "Object to be created."
+// @Param command body command.CreateMeasureType true "Object to be created."
 // @Success 201 {string} string "Id of the created object"
 // @Failure 400 {object} responses.ErrorResponse
 // @Failure 422 {object} responses.ErrorResponse
 // @Failure 500 {object} responses.ErrorResponse
 // @Router /api/v1/measuretypes [post]
-func (h HttpServer) CreateMeasureType(c echo.Context) error {
+func (h HttpServer) AddMeasureType(c echo.Context) error {
 	item := command.CreateMeasureType{}
 
 	if err := c.Bind(&item); err != nil {
@@ -41,26 +41,42 @@ func (h HttpServer) CreateMeasureType(c echo.Context) error {
 	}
 
 	if err := c.Validate(item); err != nil {
-		fmt.Println(reflect.TypeOf(err))
 		validationErrors := err.(validator.ValidationErrors)
-		fmt.Println(validationErrors[0])
-		// fmt.Println(Simple(validationErrors))
 		panic(errors.NewValidationError(Simple(validationErrors)))
-		//return errors.NewBadRequestError(err.Error())
 	}
 
 	id, err := h.app.Commands.CreateMeasureType.Handle(c.Request().Context(), item)
 
 	if err != nil {
-		// return c.JSON(http.StatusBadRequest, err.Error())
 		panic(err)
 	}
 
-	// create a response
-	//return success response
 	c.Response().Header().Set("location", c.Request().URL.String()+"/"+id)
 
 	return c.JSON(http.StatusCreated, id)
+}
+
+// GetMeasureType godoc
+// @Summary Get a measure type by Id.
+// @Tags MeasureTypes
+// @Accept json
+// @Produce json
+// @Param id path string  true  "MeasureType Id"
+// @Success 200 {object} response.MeasureTypeResponse
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 404 {object} responses.ErrorResponse
+// @Failure 500 {object} responses.ErrorResponse
+// @Router /api/v1/measuretypes/{id} [get]
+func (h HttpServer) GetMeasureType(c echo.Context) error {
+	item := query.GetMeasureTypeById{Id: c.Param("id")}
+
+	result, err := h.app.Queries.GetMeasureTypeById.Handle(c.Request().Context(), item)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return c.JSON(http.StatusOK, result)
 }
 
 func Simple(verr validator.ValidationErrors) map[string]string {

@@ -27,7 +27,7 @@ type BaseRepository struct {
 	collection *mongo.Collection
 }
 
-func NewBaseRepository(connection database.MongoConnection, document IDocument) *BaseRepository {
+func NewBaseRepository(connection *database.MongoConnection, document IDocument) *BaseRepository {
 	repository := &BaseRepository{
 		collection: connection.Database.Collection(document.GetCollectionName()),
 	}
@@ -75,9 +75,15 @@ func (repo BaseRepository) FindById(ctx context.Context, id string, receiver int
 	coll := repo.collection
 	result := coll.FindOne(ctx, bson.D{{Key: "_id", Value: objID}})
 
-	result.Decode(receiver)
+	if result.Err() != nil && result.Err() != mongo.ErrNoDocuments {
+		return result.Err()
+	}
 
-	return nil
+	if result.Err() == mongo.ErrNoDocuments {
+		return nil
+	}
+
+	return result.Decode(receiver)
 }
 
 func (repo BaseRepository) FindOne(ctx context.Context, filter interface{}, receiver interface{}) error {
@@ -87,13 +93,7 @@ func (repo BaseRepository) FindOne(ctx context.Context, filter interface{}, rece
 		return result.Err()
 	}
 
-	err := result.Decode(receiver)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return result.Decode(receiver)
 }
 
 func (repo BaseRepository) InsertMany(ctx context.Context, documents []interface{}) ([]string, error) {
@@ -133,17 +133,11 @@ func (repo BaseRepository) Paginated(ctx context.Context, filter interface{}, so
 		return err
 	}
 
-	cursor.Decode(receiver)
-
-	return nil
+	return cursor.All(ctx, receiver)
 }
 
 func (repo BaseRepository) UpdateOne(ctx context.Context, document interface{}) error {
 	_, err := repo.collection.UpdateOne(ctx, bson.D{}, document)
 
 	return err
-}
-
-func (repository BaseRepository) GetCollection() *mongo.Collection {
-	return repository.collection
 }

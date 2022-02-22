@@ -1,15 +1,15 @@
 definitions:
-  measuretype.MeasureType:
+  command.CreateMeasureType:
     properties:
-      createdAt:
+      name:
+        maxLength: 10
         type: string
-      createdBy:
-        type: string
+    required:
+    - name
+    type: object
+  response.MeasureTypeResponse:
+    properties:
       id:
-        type: string
-      modifiedAt:
-        type: string
-      modifiedBy:
         type: string
       name:
         type: string
@@ -38,7 +38,7 @@ info:
   license:
     name: MIT License
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Measure Unit API
+  title: MeasureUnit API
   version: v1
 paths:
   /api/v1/measuretypes:
@@ -51,7 +51,7 @@ paths:
         name: command
         required: true
         schema:
-          $ref: '#/definitions/measuretype.MeasureType'
+          $ref: '#/definitions/command.CreateMeasureType'
       produces:
       - application/json
       responses:
@@ -72,6 +72,38 @@ paths:
           schema:
             $ref: '#/definitions/responses.ErrorResponse'
       summary: Create a new type of measure.
+      tags:
+      - MeasureTypes
+  /api/v1/measuretypes/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: MeasureType Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.MeasureTypeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+      summary: Get a measure type by Id.
       tags:
       - MeasureTypes
 swagger: "2.0"

@@ -34,25 +34,25 @@ func (app ApplicationError) ErrorType() ErrorType {
 	return app.errorType
 }
 
-func NewApplicationError(error string, title string) ApplicationError {
+func NewApplicationError(err string, title string) ApplicationError {
 	return ApplicationError{
-		message:   error,
+		message:   err,
 		title:     title,
 		errorType: ErrorTypeUnknown,
 	}
 }
 
-func NewBadRequestError(error string) ApplicationError {
+func NewBadRequestError(err string) ApplicationError {
 	return ApplicationError{
-		message:   error,
+		message:   err,
 		title:     "Bad Request",
 		errorType: ErrorTypeBadRequest,
 	}
 }
 
-func NewNotFoundError(error string) ApplicationError {
+func NewNotFoundError(err string) ApplicationError {
 	return ApplicationError{
-		message:   error,
+		message:   err,
 		title:     "Not Found",
 		errorType: ErrorTypeNotFound,
 	}

@@ -10,7 +10,7 @@ type MeasureTypeRepository struct {
 	seedwork.BaseRepository
 }
 
-func NewMeasureTypeRepository(connection database.MongoConnection, document measuretype.MeasureType) MeasureTypeRepository {
+func NewMeasureTypeRepository(connection *database.MongoConnection, document measuretype.MeasureType) MeasureTypeRepository {
 	repository := MeasureTypeRepository{
 		BaseRepository: *seedwork.NewBaseRepository(connection, &document),
 	}

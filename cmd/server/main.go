@@ -16,7 +16,7 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-// @title Measure Unit API
+// @title MeasureUnit API
 // @version v1
 // @description Specifying services for measure units.
 
@@ -42,7 +42,8 @@ func main() {
 }
 
 type ServerInterface interface {
-	CreateMeasureType(c echo.Context) error
+	AddMeasureType(c echo.Context) error
+	GetMeasureType(c echo.Context) error
 }
 
 func Handler(si ServerInterface, router *echo.Echo) {
@@ -64,5 +65,6 @@ func Handler(si ServerInterface, router *echo.Echo) {
 	router.GET("/*", echoSwagger.WrapHandler)
 
 	//measureType
-	api.POST("/measuretypes", si.CreateMeasureType)
+	api.GET("/measuretypes/:id", si.GetMeasureType)
+	api.POST("/measuretypes", si.AddMeasureType)
 }

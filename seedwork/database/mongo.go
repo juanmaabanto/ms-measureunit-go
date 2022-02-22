@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,18 +13,7 @@ type MongoConnection struct {
 	Database *mongo.Database
 }
 
-func NewMongoConnection(ctx context.Context, databaseName string, uri string) MongoConnection {
-	client := newClient(ctx, uri)
-
-	connection := MongoConnection{
-		Client:   client,
-		Database: client.Database(databaseName),
-	}
-
-	return connection
-}
-
-func newClient(ctx context.Context, uri string) *mongo.Client {
+func NewMongoConnection(ctx context.Context, databaseName string, uri string) *MongoConnection {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 
 	if err != nil {
@@ -36,7 +24,8 @@ func newClient(ctx context.Context, uri string) *mongo.Client {
 		panic(err)
 	}
 
-	fmt.Println("Successfully connected and pinged to mongo.")
-
-	return client
+	return &MongoConnection{
+		Client:   client,
+		Database: client.Database(databaseName),
+	}
 }

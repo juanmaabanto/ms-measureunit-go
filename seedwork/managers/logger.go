@@ -25,7 +25,6 @@ type loggerDTO struct {
 }
 
 func NewLoggerManager(baseAddress string, source string) LoggerManager {
-
 	return LoggerManager{
 		BaseAddress:            baseAddress,
 		ErrorEndPointUri:       "api/v1/events/errors",
@@ -44,6 +43,11 @@ func (log LoggerManager) logger(endPoint string, message string, trace string, u
 
 	jsonReq, err := json.Marshal(dto)
 
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+
 	client := &http.Client{}
 
 	responseBody := bytes.NewBuffer(jsonReq)
@@ -60,6 +64,7 @@ func (log LoggerManager) logger(endPoint string, message string, trace string, u
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(message)
 		return ""
 	}
 	defer res.Body.Close()

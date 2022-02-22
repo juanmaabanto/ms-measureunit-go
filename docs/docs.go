@@ -50,7 +50,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/measuretype.MeasureType"
+                            "$ref": "#/definitions/command.CreateMeasureType"
                         }
                     }
                 ],
@@ -81,25 +81,74 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/v1/measuretypes/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasureTypes"
+                ],
+                "summary": "Get a measure type by Id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "MeasureType Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.MeasureTypeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "measuretype.MeasureType": {
+        "command.CreateMeasureType": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 10
+                }
+            }
+        },
+        "response.MeasureTypeResponse": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "createdBy": {
-                    "type": "string"
-                },
                 "id": {
-                    "type": "string"
-                },
-                "modifiedAt": {
-                    "type": "string"
-                },
-                "modifiedBy": {
                     "type": "string"
                 },
                 "name": {
@@ -148,7 +197,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Measure Unit API",
+	Title:       "MeasureUnit API",
 	Description: "Specifying services for measure units.",
 }
 

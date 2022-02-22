@@ -7,6 +7,7 @@ import (
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/adapters"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/command"
+	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/app/query"
 	"github.com/sofisoft-tech/ms-measureunit/internal/measureunit/domain/measuretype"
 	"github.com/sofisoft-tech/ms-measureunit/seedwork/database"
 )
@@ -20,6 +21,9 @@ func NewApplication(ctx context.Context) app.Application {
 	return app.Application{
 		Commands: app.Commands{
 			CreateMeasureType: command.NewCreateMeasureTypeHandler(measureTypeRepository),
+		},
+		Queries: app.Queries{
+			GetMeasureTypeById: query.NewGetMeasureTypeByIdHandler(measureTypeRepository),
 		},
 	}
 }
