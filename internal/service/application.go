@@ -21,6 +21,7 @@ func NewApplication(ctx context.Context) app.Application {
 	return app.Application{
 		Commands: app.Commands{
 			CreateMeasureType: command.NewCreateMeasureTypeHandler(measureTypeRepository),
+			DeleteMeasureType: command.NewDeleteMeasureTypeHandler(measureTypeRepository),
 			UpdateMeasureType: command.NewUpdateMeasureTypeHandler(measureTypeRepository),
 		},
 		Queries: app.Queries{

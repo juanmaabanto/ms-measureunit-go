@@ -18,7 +18,7 @@ func (mock MockRepository) Count(ctx context.Context, filter interface{}) (int64
 }
 
 func (mock MockRepository) DeleteById(ctx context.Context, id string) (int64, error) {
-	args := mock.Called()
+	args := mock.Called(ctx, id)
 	result := args.Get(0)
 
 	return result.(int64), args.Error(1)

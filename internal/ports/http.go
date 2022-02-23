@@ -58,6 +58,29 @@ func (h HttpServer) AddMeasureType(c echo.Context) error {
 	return c.JSON(http.StatusCreated, id)
 }
 
+// DeleteMeasureType godoc
+// @Summary Delete a measure type by Id.
+// @Tags MeasureTypes
+// @Accept json
+// @Produce json
+// @Param id path string  true  "MeasureType Id"
+// @Success 204
+// @Failure 400 {object} responses.ErrorResponse
+// @Failure 404 {object} responses.ErrorResponse
+// @Failure 500 {object} responses.ErrorResponse
+// @Router /api/v1/measuretypes/{id} [delete]
+func (h HttpServer) DeleteMeasureType(c echo.Context) error {
+	item := command.DeleteMeasureType{Id: c.Param("id")}
+
+	err := h.app.Commands.DeleteMeasureType.Handle(c.Request().Context(), item)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return c.JSON(http.StatusNoContent, nil)
+}
+
 // GetMeasureType godoc
 // @Summary Get a measure type by Id.
 // @Tags MeasureTypes

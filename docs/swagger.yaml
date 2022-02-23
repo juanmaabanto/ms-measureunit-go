@@ -166,6 +166,35 @@ paths:
       tags:
       - MeasureTypes
   /api/v1/measuretypes/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: MeasureType Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+      summary: Delete a measure type by Id.
+      tags:
+      - MeasureTypes
     get:
       consumes:
       - application/json
